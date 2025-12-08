@@ -3,7 +3,17 @@ package Application.Service;
 import Application.Model.Flight;
 import Application.DAO.FlightDAO;
 
+import static org.mockito.ArgumentMatchers.isNull;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+
 import java.util.List;
+import java.sql.Statement;
+import java.util.LinkedList;
+import java.sql.*;
+import Application.Util.ConnectionUtil;
+
 
 /**
  * The purpose of a Service class is to contain "business logic" that sits between the web layer (controller) and
@@ -70,7 +80,9 @@ public class FlightService {
      *         user should have some insight if they attempted to edit a nonexistent flight.)
      */
     public Flight updateFlight(int flight_id, Flight flight){
-        return null;
+        if (flightDAO.getFlightById(flight_id) == null)
+            return null;
+        
     }
 
     /**
@@ -80,6 +92,44 @@ public class FlightService {
      * @return all flights in the database.
      */
     public List<Flight> getAllFlights() {
+        try (Connection connection = ConnectionUtil.getConnection()){
+            // This method will return a collection of objects from the database.
+            List<Flight> flights = new LinkedList<>();
+
+            // The query to execute on the database.
+            String sql = "SELECT * FROM flight"; 
+
+            // Here, we use a simple statement instead of a prepared statement. 
+            // We have no fear of SQL injection in this case since the query does not take any input from the user.
+            Statement s = connection.createStatement(); 
+
+            // The executeQuery statement will return a ResultSet with data from the database.
+            ResultSet rs = s.executeQuery(sql);
+
+            // The next() method will return true while data still exists in the ResultSet.
+            while(rs.next()){ 
+                // For each record in the result set, we will create a Member object and add it to a list which we will return.
+                Flight flight = new Flight();
+                // We are using the setter methods on the ‘Member’ object to set values to instance fields.
+                // Using the ResultSet we can get the value of each column. Note that the column index can be used as well.
+                //flight.setFlight_id(rs.getString("email"));
+                flight.setDeparture_city(rs.getString("departure_city"));
+                flight.setArrival_city(rs.getString("arrival_city"));
+                //flight.setRegistrationDate(rs.getDate("registration_date"));
+                //flight.setPassword(rs.getString("password"));
+
+                // Add the newly created member to the list.
+                flights.add(flight);
+            }
+
+            // After populating the list, return the retrieved data.
+            return flights;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Return null if no records are found, or if something went wrong.
         return null;
     }
 
