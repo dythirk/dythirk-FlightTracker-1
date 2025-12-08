@@ -152,7 +152,7 @@ public class FlightDAO {
         Connection connection = ConnectionUtil.getConnection();
         try {
             //Write SQL logic here
-            String sql = "UPDATE light set departure_city=?, arrival_city=? where flight_id = ?;";
+            String sql = "UPDATE Flight set departure_city=?, arrival_city=? where flight_id = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             //write PreparedStatement setString and setInt methods here.
@@ -190,7 +190,7 @@ public class FlightDAO {
         List<Flight> flights = new ArrayList<>();
         try {
             //Write SQL logic here
-            String sql = "SELECT * from flight where departure_city = ? and arrival_city = ?;";
+            String sql = "SELECT * from Flight where departure_city = ? and arrival_city = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             //write PreparedStatement setString and setInt methods here.
