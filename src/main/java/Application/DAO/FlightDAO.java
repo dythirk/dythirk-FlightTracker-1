@@ -33,7 +33,7 @@ public class FlightDAO {
         List<Flight> flights = new ArrayList<>();
         try {
             //Write SQL logic here
-            String sql = "SELECT * from flight";
+            String sql = "SELECT * from Flight";
 
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet rs = preparedStatement.executeQuery();
@@ -185,7 +185,7 @@ public class FlightDAO {
      * @param arrival_city the arriving city.
      * @return all flights from departure_city to arrival_city.
      */
-    public List<Flight> getAllFlightsFromCityToCity(String departure_cit, String arrival_cit){
+    public List<Flight> getAllFlightsFromCityToCity(String departure_city, String arrival_city){
         Connection connection = ConnectionUtil.getConnection();
         List<Flight> flights = new ArrayList<>();
         try {
@@ -195,14 +195,14 @@ public class FlightDAO {
 
             //write PreparedStatement setString and setInt methods here.
 
-            preparedStatement.setString(1,departure_cit);
-            preparedStatement.setString(2,arrival_cit);
+            preparedStatement.setString(1,"departure_city");
+            preparedStatement.setString(2,"arrival_city");
 
 
             ResultSet rs = preparedStatement.executeQuery();
             while(rs.next()){
-                Flight flight = new Flight(rs.getInt("flight_id"), rs.getString("departure_cit"),
-                        rs.getString("arrival_cit"));
+                Flight flight = new Flight(rs.getInt("flight_id"), rs.getString("departure_city"),
+                        rs.getString("arrival_city"));
                 flights.add(flight);
             }
         }catch(SQLException e){
