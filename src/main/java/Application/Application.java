@@ -6,8 +6,7 @@ import io.javalin.Javalin;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
+import java.sql.SQLException; 
 /**
  * There is no need to modify anything in this class.
  * The main method will start a new Javalin API on the console at localhost:8080.
