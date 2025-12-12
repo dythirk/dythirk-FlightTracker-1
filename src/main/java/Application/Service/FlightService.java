@@ -82,6 +82,7 @@ public class FlightService {
      */
     public Flight updateFlight(int flight_id, Flight flight){
         flightDAO.updateFlight(flight_id, flight);
+        return flightDAO.getFlightById(flight_id);
 
 }
 
@@ -105,5 +106,10 @@ public class FlightService {
      */
     public List<Flight> getAllFlightsFromCityToCity(String departure_city, String arrival_city) {
          return flightDAO.getAllFlightsFromCityToCity(departure_city, arrival_city);
+    }
+
+    public Flight getFlight(int id){
+        return flightDAO.getFlightById(id);
+
     }
 }
