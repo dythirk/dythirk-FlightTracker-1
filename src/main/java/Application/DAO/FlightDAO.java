@@ -28,7 +28,7 @@ public class FlightDAO {
      *
      * @return all flights.
      */
-    public List<Flight> getAllFlights(){
+    public static List<Flight> getAllFlights(){
         Connection connection = ConnectionUtil.getConnection();
         List<Flight> flights = new ArrayList<>();
         try {
@@ -105,7 +105,7 @@ public class FlightDAO {
      *
      * @param flight an object modelling a Flight. the flight object does not contain a flight ID.
      */
-    public Flight insertFlight(Flight flight){
+    public static Flight insertFlight(Flight flight){
         Connection connection = ConnectionUtil.getConnection();
         try {
             //Write SQL logic here. When inserting, you only need to define the departure_city and arrival_city
@@ -148,7 +148,7 @@ public class FlightDAO {
      * @param id a flight ID.
      * @param flight a flight object. the flight object does not contain a flight ID.
      */
-    public void updateFlight(int id, Flight flight){
+    public static void updateFlight(int id, Flight flight){
         Connection connection = ConnectionUtil.getConnection();
         try {
             //Write SQL logic here
@@ -185,7 +185,7 @@ public class FlightDAO {
      * @param arrival_city the arriving city.
      * @return all flights from departure_city to arrival_city.
      */
-    public List<Flight> getAllFlightsFromCityToCity(String departure_city, String arrival_city){
+    public static List<Flight> getAllFlightsFromCityToCity(String departure_city, String arrival_city){
         Connection connection = ConnectionUtil.getConnection();
         List<Flight> flights = new ArrayList<>();
         try {
