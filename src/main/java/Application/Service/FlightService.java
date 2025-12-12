@@ -64,7 +64,7 @@ public class FlightService {
      *         inform our provide the front-end client with information about the added Flight.
      */
     public Flight addFlight(Flight flight){
-        return null;
+        return FlightDAO.insertFlight(flight);
     }
 
     /**
@@ -81,32 +81,7 @@ public class FlightService {
      *         user should have some insight if they attempted to edit a nonexistent flight.)
      */
     public Flight updateFlight(int flight_id, Flight flight){
-        if (flightDAO.getFlightById(flight_id) == null)
-            return null;
-        try (Connection conn = ConnectionUtil.getConnection()){
-        String sql = "UPDATE flight SET departure_city = ? , arrival_city = ? WHERE flight_id = ?";
-        PreparedStatement ps = conn.prepareStatement(sql);
-
-        ps.setString(1, flight.getDeparture_city());
-        ps.setString(2, flight.getArrival_city());
-        //ps.setInt(3, updatedMember.getExperienceMonths());
-        //ps.setDate(4, updatedMember.getRegistrationDate());
-
-            // Remember that we set the value of the placeholders for the PreparedStatement query.
-            // Here, we are setting the email for the search condition ‘WHERE email = ?’.
-        ps.setInt(3, flight_id);
-
-        int checkInsert = ps.executeUpdate(); 
-
-        //if(checkInsert == 0){
-        //    throw new ResourcePersistanceException("Member was not entered into the database.");
-        //}
-            // Instead of returning a representation for the object, we can return true or false to represent if the update was successful or not    
-        return true;
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return false;}
+        FlightDAO.updateFlight(flight_id,flight);
 
 }
 
@@ -117,45 +92,7 @@ public class FlightService {
      * @return all flights in the database.
      */
     public List<Flight> getAllFlights() {
-        try (Connection connection = ConnectionUtil.getConnection()){
-            // This method will return a collection of objects from the database.
-            List<Flight> flights = new LinkedList<>();
-
-            // The query to execute on the database.
-            String sql = "SELECT * FROM flight"; 
-
-            // Here, we use a simple statement instead of a prepared statement. 
-            // We have no fear of SQL injection in this case since the query does not take any input from the user.
-            Statement s = connection.createStatement(); 
-
-            // The executeQuery statement will return a ResultSet with data from the database.
-            ResultSet rs = s.executeQuery(sql);
-
-            // The next() method will return true while data still exists in the ResultSet.
-            while(rs.next()){ 
-                // For each record in the result set, we will create a Member object and add it to a list which we will return.
-                Flight flight = new Flight();
-                // We are using the setter methods on the ‘Member’ object to set values to instance fields.
-                // Using the ResultSet we can get the value of each column. Note that the column index can be used as well.
-                //flight.setFlight_id(rs.getString("email"));
-                flight.setDeparture_city(rs.getString("departure_city"));
-                flight.setArrival_city(rs.getString("arrival_city"));
-                //flight.setRegistrationDate(rs.getDate("registration_date"));
-                //flight.setPassword(rs.getString("password"));
-
-                // Add the newly created member to the list.
-                flights.add(flight);
-            }
-
-            // After populating the list, return the retrieved data.
-            return flights;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        // Return null if no records are found, or if something went wrong.
-        return null;
+        return FlightDAO.getAllFlights();
     }
 
     /**
@@ -167,28 +104,6 @@ public class FlightService {
      * @return all flights departing from departure_city and arriving at arrival_city.
      */
     public List<Flight> getAllFlightsFromCityToCity(String departure_city, String arrival_city) {
-        Connection connection = ConnectionUtil.getConnection();
-        List<Flight> flights = new ArrayList<>();
-        try {
-            //Write SQL logic here
-            String sql = "SELECT * from Flight where departure_city = ? and arrival_city = ?;";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-
-            //write PreparedStatement setString and setInt methods here.
-
-            preparedStatement.setString(1,"departure_city");
-            preparedStatement.setString(2,"arrival_city");
-
-
-            ResultSet rs = preparedStatement.executeQuery();
-            while(rs.next()){
-                Flight flight = new Flight(rs.getInt("flight_id"), rs.getString("departure_city"),
-                        rs.getString("arrival_city"));
-                flights.add(flight);
-            }
-        }catch(SQLException e){
-            System.out.println(e.getMessage());
-        }
-        return flights;
+        FlightDAO.getAllFlightsFromCityToCity(departure_city, arrival_city);
     }
 }
